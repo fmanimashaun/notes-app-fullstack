@@ -14,11 +14,12 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "cd ../backend && npm run build:ui",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "json-server -p3001 --watch db.json"
+    "client": "cd ../frontend && react-scripts start",
+    "server": "cd ../backend && npm run start"
   },
   "eslintConfig": {
     "extends": [
@@ -39,6 +40,7 @@
     ]
   },
   "devDependencies": {
+    "concurrently": "^8.2.0",
     "json-server": "^0.17.3"
   }
 }
