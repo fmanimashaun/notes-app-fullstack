@@ -78,6 +78,8 @@ const App = () => {
         <input value={newNote} onChange={handleNotechange} />
         <button type="submit">save</button>
       </form>
+
+      <p className='footnote'>Note App, courtsey of Department of Computer, University of Helsinki 2023</p>
     </div>
   )
 }
