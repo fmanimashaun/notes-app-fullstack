@@ -38,7 +38,6 @@ app.get('/api/notes', (req, res) => {
 
 app.post('/api/notes', (req, res) => {
   const body = req.body;
-  console.log(body);
 
   if (body.content === undefined) {
     return res.status(400).json({
