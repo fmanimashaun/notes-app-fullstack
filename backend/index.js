@@ -8,21 +8,21 @@ const Note = require('./models/note')
 
 
 
-const requestLogger = (request, response, next) => {
-  console.log('Method:', request.method);
-  console.log('Path:  ', request.path);
-  console.log('Body:  ', request.body);
+const reqLogger = (req, res, next) => {
+  console.log('Method:', req.method);
+  console.log('Path:  ', req.path);
+  console.log('Body:  ', req.body);
   console.log('---');
   next();
 };
 
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' });
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({ error: 'unknown endpoint' });
 };
 
 app.use(express.static('build'));
 app.use(express.json());
-app.use(requestLogger);
+app.use(reqLogger);
 app.use(cors());
 
 
@@ -36,11 +36,11 @@ app.get('/api/notes', (req, res) => {
   })
 });
 
-app.post('/api/notes', (request, response) => {
-  const body = request.body;
+app.post('/api/notes', (req, res) => {
+  const body = req.body;
 
   if (!body.content) {
-    return response.status(400).json({
+    return res.status(400).json({
       error: 'content missing',
     });
   }
@@ -51,35 +51,35 @@ app.post('/api/notes', (request, response) => {
   });
 
   note.save().then((savedNote) => {
-    response.json(savedNote);
+    res.json(savedNote);
   });
 });
 
-app.get('/api/notes/:id', (request, response) => {
-  Note.findById(request.params.id).then((note) => {
-    response.json(note);
+app.get('/api/notes/:id', (req, res) => {
+  Note.findById(req.params.id).then((note) => {
+    res.json(note);
   });
 });
 
-app.delete('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id);
+app.delete('/api/notes/:id', (req, res) => {
+  const id = Number(req.params.id);
   notes = notes.filter((note) => note.id !== id);
 
-  response.status(204).end();
+  res.status(204).end();
 });
 
-app.put('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id);
+app.put('/api/notes/:id', (req, res) => {
+  const id = Number(req.params.id);
 
-  const updatedNote = request.body;
+  const updatedNote = req.body;
 
   const note = notes.find((n) => n.id === id);
 
   if (note) {
     notes = notes.map((note) => (note.id === id ? updatedNote : note));
-    response.json(updatedNote);
+    res.json(updatedNote);
   } else {
-    response.status(404).end();
+    res.status(404).end();
   }
 });
 
